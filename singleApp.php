@@ -45,32 +45,64 @@
         @$doc->loadHTML( '<?xml encoding="utf-8" ?>' . $result);
         $doc->saveHTML();
 
-        $xpath = new DOMXpath($doc);
-
-        $lemas = $xpath->query("/html/body/div");
-
-        $entity       = array(); 
-        $defs = array();
+        $xpath  = new DOMXpath($doc);
+        $lemas  = $xpath->query("/html/body/div");
+        $entity = array(); 
+        $defs   = array();
 
         if( $lemas->length > 0 )
         {
-            for( $index = 0; $index < $lemas->length; $index++ )
+            for( $index = 1; $index <= $lemas->length; $index++ )
             {
-                $defNodes = $xpath->query("/html/body/div/p[position()>3]");
-                $definiciones = function() use( $defNodes ) { foreach( $defNodes as $def ) { $defs[] = trim($def->textContent); } return $defs; };
+                $defNodes = $xpath->query("/html/body/div[{$index}]/p[position()>3]");
+                
+                $definiciones = function() use( $defNodes ) 
+                { 
+                    $i = 0;
+                    $ex = false;
+                    foreach( $defNodes as $def ) 
+                    {
+                        if( $def->getAttribute("class") == "p" ) 
+                        {
+                            $defs[] = array( trim( $def->textContent ) => array() );
+                            $carry  = $i;
+                            $carry2 = trim( $def->textContent );
+                            $ex     = true;
+                            //var_dump($i." - ".$carry." - ".$carry2."<br>");
+                        }
+                        elseif( $def->getAttribute("class") == "q" and $ex )
+                        {
+                            $defs[$carry][$carry2][] = trim( $def->textContent );
+                        }                                                        
+                        else
+                        {
+                            $defs[] = trim( $def->textContent );
+                        }
+                        
+                        if( $def->getAttribute("class") == "q" and !$ex ) 
+                        {
+                            $i++;
+                        }
+                        elseif($def->getAttribute("class") == "p")
+                            $i++;   
+                    }
 
-                $entity[] = array(
-                    "etimología"    => ( $xpath->query("/html/body/div/p[2]")->length > 0 ? trim( $xpath->query("/html/body/div/p")->item(1)->textContent )  : NULL ) ,
-                    "id"            => ( $xpath->query("/html/body/div/a")->length    > 0 ? $xpath->query("/html/body/div/a")->item(0)->getAttribute("name") : NULL ) ,
-                    "lema"          => $xpath->query("/html/body/div/p")->item(0)->textContent                                                                        ,
+                    return $defs; 
+                 };
+
+                 $entity[] = array(
+                    "etimología"    => ( $xpath->query("/html/body/div[{$index}]/p[2]")->length > 0 ? trim( $xpath->query("/html/body/div[{$index}]/p")->item(1)->textContent )  : NULL ) ,
+                    "id"            => ( $xpath->query("/html/body/div[{$index}]/a")->length    > 0 ? $xpath->query("/html/body/div[{$index}]/a")->item(0)->getAttribute("name") : NULL ) ,
+                    "lema"          => $xpath->query("/html/body/div[{$index}]/p")->item(0)->textContent                                                                        ,
                     "definiciones"  => $definiciones()
                 ); 
             }                
         }
         else
         {
-
+            
         }
+        
         header("Content-Type: application/json");
         print(json_encode($entity));
     }
