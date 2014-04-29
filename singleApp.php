@@ -94,7 +94,7 @@
                     "etimología"    => ( $xpath->query("/html/body/div[{$index}]/p[2]")->length > 0 ? trim( $xpath->query("/html/body/div[{$index}]/p")->item(1)->textContent )  : NULL ) ,
                     "id"            => ( $xpath->query("/html/body/div[{$index}]/a")->length    > 0 ? $xpath->query("/html/body/div[{$index}]/a")->item(0)->getAttribute("name") : NULL ) ,
                     "lema"          => $xpath->query("/html/body/div[{$index}]/p")->item(0)->textContent                                                                        ,
-                    "definiciones"  => $definiciones()
+                    "definiciones"  => $definiciones
                 ); 
             }                
         }
