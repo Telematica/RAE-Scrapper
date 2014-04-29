@@ -56,7 +56,7 @@
             {
                 $defNodes = $xpath->query("/html/body/div[{$index}]/p[position()>3]");
                 
-                $definiciones = function() use( $defNodes ) 
+                $definiciones = call_user_func( function() use( $defNodes ) 
                 { 
                     $i = 0;
                     $ex = false;
@@ -88,7 +88,7 @@
                     }
 
                     return $defs; 
-                 };
+                 });
 
                  $entity[] = array(
                     "etimología"    => ( $xpath->query("/html/body/div[{$index}]/p[2]")->length > 0 ? trim( $xpath->query("/html/body/div[{$index}]/p")->item(1)->textContent )  : NULL ) ,
