@@ -1,6 +1,6 @@
 <?php
     
-    $word = utf8_decode( ( isset( $_GET["search"] ) ? $_GET["search"] : "" ) );
+    $word = utf8_decode( ( isset( $_GET["search"] ) ? mb_strtolower( $_GET["search"], 'UTF-8' ) : "" ) );
 
     $query = array(
         'origen'  => 'RAE'  ,
@@ -8,9 +8,9 @@
         'val_aux' => ''     ,        
         'val'     => $word
     );          
+   
+    $endpoint = 'http://lema.rae.es/drae/srv/search?' . http_build_query( $query );
 
-    $endpoint= 'http://lema.rae.es/drae/srv/search?' . http_build_query( $query );
-    
     $fields = array(
         'TS014dfc77_id' => urlencode( "3" ),
         'TS014dfc77_cr' => '1a285e2c3a9cd4734a6c9e597c92c6f5:jihl:c55Mjc2J:1073656524',
@@ -110,5 +110,3 @@
     {
 
     }
-
-  
