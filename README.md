@@ -1,4 +1,4 @@
-RAE-API
+RAE-Scraper
 =======
 
-RAE API - [ UNOFFICIAL] [ EXPERIMENTAL ]
+RAE Scraper - [ UNOFFICIAL] [ EXPERIMENTAL ]
