@@ -9,7 +9,9 @@
         'val'     => $word
     );          
    
-    $endpoint = 'http://lema.rae.es/drae/srv/search?' . http_build_query( $query );
+    $endpoint = 'http://lema.rae.es/drae/srv/';
+    $queryURL = $endpoint . "search?" . http_build_query( $query );
+
 
     $fields = array(
         'TS014dfc77_id' => urlencode( "3" ),
@@ -27,7 +29,7 @@
     $ch = curl_init();
 
     //set the url, number of POST vars, POST data
-    curl_setopt( $ch, CURLOPT_URL           , $endpoint       );
+    curl_setopt( $ch, CURLOPT_URL           , $queryURL       );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1               );
     curl_setopt( $ch, CURLOPT_POST          , count( $query ) );
     curl_setopt( $ch, CURLOPT_POSTFIELDS    , $fields_string  );
@@ -102,24 +104,35 @@
         else
         {
             $altNodes     = $xpath->query( "/html/body/ul/li/a" );
-            $alternativas = call_user_func( function() use( $altNodes ) 
-            { 
-                foreach( $altNodes as $alt ) 
-                {
-                    $definicion = trim( $alt->textContent );
-                    $defs[] = $definicion;
+            if( $altNodes->length > 0 )
+            {
+                $alternativas = call_user_func( function() use( $altNodes, $endpoint ) 
+                { 
+                    foreach( $altNodes as $alt ) 
+                    {
+                        $definicion = trim( $alt->textContent );
+                        $defs[]     = array( $definicion => $endpoint . $alt->getAttribute( "href" ) );
 
-                }
-                 
-                return $defs; 
-             });
+                    }
+                     
+                    return $defs; 
+                 });                
 
+                $entity = array(
+                    "error"        => TRUE,
+                    "mensaje"      => $xpath->query( "/html/body/p/span" )->item(0)->textContent,
+                    "alternativas" => $alternativas
+                );
+            }
+            else
+            {
+                $mensaje = $xpath->query( "/html/body/p/font" )->item(0)->textContent;
 
-            $entity = array(
-                "error"        => TRUE,
-                "mensaje"      => $xpath->query( "/html/body/p/span" )->item(0)->textContent,
-                "alternativas" => $alternativas
-            );
+                $entity = array(
+                    "error"        => TRUE,
+                    "mensaje"      => $mensaje
+                );
+            }
         }
         
         header( "Content-Type: application/json" );
