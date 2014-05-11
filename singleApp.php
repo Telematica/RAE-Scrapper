@@ -27,10 +27,10 @@
     $ch = curl_init();
 
     //set the url, number of POST vars, POST data
-    curl_setopt( $ch,CURLOPT_URL, $endpoint             );
-    curl_setopt( $ch,CURLOPT_RETURNTRANSFER, 1          );
-    curl_setopt( $ch,CURLOPT_POST, count( $query )      );
-    curl_setopt( $ch,CURLOPT_POSTFIELDS, $fields_string );
+    curl_setopt( $ch, CURLOPT_URL           , $endpoint       );
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1               );
+    curl_setopt( $ch, CURLOPT_POST          , count( $query ) );
+    curl_setopt( $ch, CURLOPT_POSTFIELDS    , $fields_string  );
 
 
     //execute post
@@ -74,6 +74,7 @@
                         }
                         elseif( $def->getAttribute( "class" ) == "q" and $ex )
                         {
+//                            var_dump($i." - ".$carry." - ".$carry2."<br>", $defs );
                             $defs[ $carry ][ $carry2 ][] = trim( $definicion );
                         }                                                        
                         else
@@ -81,7 +82,7 @@
                             $defs[] = trim( $definicion );
                         }
                         
-                        if( ( $def->getAttribute( "class" ) == "q" and !$ex ) OR $def->getAttribute( "class" ) == "p" ) 
+                        if( ( $def->getAttribute( "class" ) == "q" and !$ex ) OR $def->getAttribute( "class" ) == "p" OR $def->getAttribute( "class" ) == "m"  ) 
                         {
                             $i++;
                         }
@@ -100,7 +101,25 @@
         }
         else
         {
-            
+            $altNodes     = $xpath->query( "/html/body/ul/li/a" );
+            $alternativas = call_user_func( function() use( $altNodes ) 
+            { 
+                foreach( $altNodes as $alt ) 
+                {
+                    $definicion = trim( $alt->textContent );
+                    $defs[] = $definicion;
+
+                }
+                 
+                return $defs; 
+             });
+
+
+            $entity = array(
+                "error"        => TRUE,
+                "mensaje"      => $xpath->query( "/html/body/p/span" )->item(0)->textContent,
+                "alternativas" => $alternativas
+            );
         }
         
         header( "Content-Type: application/json" );
