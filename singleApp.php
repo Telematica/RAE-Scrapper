@@ -12,7 +12,6 @@
     $endpoint = 'http://lema.rae.es/drae/srv/';
     $queryURL = $endpoint . "search?" . http_build_query( $query );
 
-
     $fields = array(
         'TS014dfc77_id' => urlencode( "3" ),
         'TS014dfc77_cr' => '1a285e2c3a9cd4734a6c9e597c92c6f5:jihl:c55Mjc2J:1073656524',
@@ -118,9 +117,11 @@
                     return $defs; 
                  });                
 
-                $entity = array(
+                $mensaje = ( isset( $xpath->query( "/html/body/p/span" )->item(0)->textContent ) ? $xpath->query( "/html/body/p/span" )->item(0)->textContent : false ); 
+
+                $entity  = array(
                     "error"        => TRUE,
-                    "mensaje"      => $xpath->query( "/html/body/p/span" )->item(0)->textContent,
+                    "mensaje"      => $mensaje,
                     "alternativas" => $alternativas
                 );
             }
