@@ -127,12 +127,22 @@
             }
             else
             {
-                $mensaje = $xpath->query( "/html/body/p/font" )->item(0)->textContent;
+                $mensaje = $xpath->query( "/html/body/p/font" );
 
-                $entity = array(
-                    "error"        => TRUE,
-                    "mensaje"      => $mensaje
-                );
+                if( $mensaje->length > 0 )
+                {
+                    $entity = array(
+                        "error"   => TRUE,
+                        "mensaje" => $mensaje->item(0)->textContent
+                    );
+                }
+                else
+                {
+                    $entity = array(
+                        "error"   => TRUE,
+                        "mensaje" => "Error desconocido"
+                    );
+                }
             }
         }
         
