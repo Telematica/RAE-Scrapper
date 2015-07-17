@@ -1,6 +1,8 @@
 <?php
     
-    $word = utf8_decode( ( isset( $_GET["search"] ) ? mb_strtolower( $_GET["search"], 'UTF-8' ) : "" ) );
+    //"key" param now recognizes utf8 strings, then re-decode isn't mandatory
+    //$word = utf8_decode( ( isset( $_GET["search"] ) ? mb_strtolower( $_GET["search"], 'UTF-8' ) : "" ) );
+    $word = ( isset( $_GET["search"] ) ? mb_strtolower( $_GET["search"], 'UTF-8' ) : "" );
 
     $query = array(
         'origen'  => 'RAE'  ,
