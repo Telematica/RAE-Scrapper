@@ -12,10 +12,12 @@
     $endpoint = 'http://lema.rae.es/drae/srv/';
     $queryURL = $endpoint . "search?" . http_build_query( $query );
 
+    //Todo: These fields could be obtained from the first page query, hence, this part of the word/meaning phase it could be automatized.
     $fields = array(
         'TS014dfc77_id' => urlencode( "3" ),
-        'TS014dfc77_cr' => '1a285e2c3a9cd4734a6c9e597c92c6f5:jihl:c55Mjc2J:1073656524',
+        'TS014dfc77_cr' => '0062b2344bb9411eefe2a2de74bf702b:deec:hf74lCd7:2024784252',
         'TS014dfc77_76' => urlencode( "0" ),
+        'TS014dfc77_86' => urlencode( "0" ),        
         'TS014dfc77_md' => urlencode( "1" ),
         'TS014dfc77_rf' => urlencode( "0" ),
         'TS014dfc77_ct' => urlencode( "0" ),
