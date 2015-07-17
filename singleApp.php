@@ -6,7 +6,7 @@
         'origen'  => 'RAE'  ,
         'type'    => '3'    ,
         'val_aux' => ''     ,        
-        'val'     => $word
+        'key'     => $word
     );          
    
     $endpoint = 'http://lema.rae.es/drae/srv/';
