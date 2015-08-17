@@ -4,7 +4,8 @@ RewriteBase /RAE-API
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule (\w+$) singleApp.php?search=$1 [L]
+#RewriteRule (\w+$) singleApp.php?search=$1 [L]
+RewriteRule (\/(.+$)) singleApp.php?search=$2 [L]
 
 <IfModule !mod_rewrite.c>
     # If we don't have mod_rewrite installed, all 404's
