@@ -10,3 +10,8 @@
 curl -H "Upgrade-Insecure-Requests:1" \
 -H "User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36" \ 
 -X GET http://dle.rae.es/srv/fetch?w=manijero
+
+#@todo new implementation
+#http://stackoverflow.com/questions/5080988/how-to-extract-string-following-a-pattern-with-grep-regex-or-perl#answer-5081519
+curl -H "Upgrade-Insecure-Requests:1" -H "User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36" \
+-X GET http://dle.rae.es/srv/fetch?w=manijero | grep -Po 'name="\K.*?(?=")'
